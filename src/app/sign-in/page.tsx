@@ -1,12 +1,10 @@
-"use client";
-
 import React from "react";
-import SignInForm from "../components/auth/SignInForm";
+import { Login } from "@/src/components/Login";
 
 const SignInPage = () => {
   return (
     <div className="flex-wrapper flex-col mt-16">
-      <SignInForm />
+      <Login />
     </div>
   );
 };

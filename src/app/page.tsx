@@ -1,22 +1,26 @@
 "use client";
 
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { SessionStatus } from "@/client/types/session";
+import { SESSION_STATUS } from "@/lib/types/session";
+import { ROUTE_PATCH } from "@/src/common";
 
 const HomePage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (status === SessionStatus.AUTHENTICATED) {
-      router.push("/tasks");
+    if (status === SESSION_STATUS.AUTHENTICATED) {
+      router.replace(ROUTE_PATCH.TASKS);
+      return;
     }
 
-    if (status === SessionStatus.UNAUTHENTICATED) router.push("/sign-in");
-  }, [router, session]);
+    if (status === SESSION_STATUS.UNAUTHENTICATED) {
+      router.replace(ROUTE_PATCH.LOGIN);
+      return;
+    }
+  }, [session, status, router]);
 
   return (
     <div className="flex-wrapper">

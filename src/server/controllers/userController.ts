@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { userService } from "@/server/services/userService";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../utils/auth";
+import { authOptions } from "@/server/auth";
+import { userService } from "@/server/services/userService";
 
 export class UserController {
   static async getUser() {
@@ -42,13 +42,12 @@ export class UserController {
 
       const userId = Number(session.user.id);
       const updateData = await req.json();
-
       const updatedUser = await userService.updateUser(userId, updateData);
 
       return NextResponse.json(updatedUser, { status: 200 });
     } catch (error) {
       console.error("Error updating user:", error);
-      
+
       return NextResponse.json(
         { message: "Error updating user" },
         { status: 500 }

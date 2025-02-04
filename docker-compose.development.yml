@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   postgres:
     image: postgres:13
@@ -26,7 +26,8 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:3000/api
-    command: ["sh", "-c", "npx prisma migrate deploy && npm test && npm run dev"]
+    command:
+      ["sh", "-c", "npx prisma migrate deploy && npm test && npm run dev"]
     networks:
       - my-todo-app_default
     depends_on:

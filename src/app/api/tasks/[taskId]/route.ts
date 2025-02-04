@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { TaskController } from "@/server/controllers/taskController";
+import { TaskController } from "@/src/server/controllers/taskController";
 
 export async function PATCH(req: NextRequest) {
   return TaskController.updateTask(req);

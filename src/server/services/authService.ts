@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
-import prisma from "../utils/db";
+import prisma from "@/server/db";
 
-export const userService = {
+export const AuthService = {
   async login(email: string, password: string) {
     const user = await prisma.user.findUnique({ where: { email } });
 
@@ -40,7 +40,7 @@ export const userService = {
 
     return newUser;
   },
-  
+
   async logout(): Promise<void> {
     console.log("User logged out using NextAuth.");
   },

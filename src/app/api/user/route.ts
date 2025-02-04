@@ -1,4 +1,4 @@
-import { UserController } from "@/server/controllers/userController";
+import { UserController } from "@/src/server/controllers/userController";
 import { NextRequest } from "next/server";
 
 export async function GET() {

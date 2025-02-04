@@ -1,15 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { ROUTE_PATCH } from "@/src/common";
 
 const AuthErrorPage = () => {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
-//
+
   const handleRedirect = () => {
-    window.location.href = "/user";
+    window.location.href = ROUTE_PATCH.LOGIN;
   };
 
   return (

@@ -1,23 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { userService } from "@/server/services/authService";
+import { AuthService } from "@/server/services/authService";
+import { AUTH_MESSAGES } from "@/src/common";
 
 export class AuthController {
   static async register(req: NextRequest) {
     try {
       const body = await req.json();
-      
       const { email, password, firstName, lastName } = body;
 
       if (!email || !password) {
-        console.error("Missing email or password");
-        
+        console.error(AUTH_MESSAGES.ERROR.MISSING_EMAIL_PASSWORD);
+
         return NextResponse.json(
-          { message: "Email and password are required" },
+          { message: AUTH_MESSAGES.ERROR.MISSING_EMAIL_PASSWORD },
           { status: 400 }
         );
       }
 
-      const newUser = await userService.register(
+      const newUser = await AuthService.register(
         email,
         password,
         firstName,
@@ -26,7 +26,7 @@ export class AuthController {
 
       return NextResponse.json(
         {
-          message: "User registered successfully",
+          message: AUTH_MESSAGES.SUCCESS.USER_REGISTERED,
           user: { id: newUser.id, email: newUser.email },
         },
         { status: 201 }
@@ -36,13 +36,13 @@ export class AuthController {
 
       if ((error as Error).message === "User already exists") {
         return NextResponse.json(
-          { message: "User already exists" },
+          { message: AUTH_MESSAGES.ERROR.USER_ALREADY_EXISTS },
           { status: 409 }
         );
       }
 
       return NextResponse.json(
-        { message: "Error registering user" },
+        { message: AUTH_MESSAGES.ERROR.ERROR_REGISTERING_USER },
         { status: 500 }
       );
     }
@@ -52,17 +52,19 @@ export class AuthController {
     const { email, password } = await req.json();
 
     try {
-      const user = await userService.login(email, password);
+      const user = await AuthService.login(email, password);
       return NextResponse.json(
         {
-          message: "Login successful",
+          message: AUTH_MESSAGES.SUCCESS.LOGIN_SUCCESSFUL,
           user: { id: user.id, email: user.email },
         },
         { status: 200 }
       );
     } catch (error) {
+      console.error(AUTH_MESSAGES.ERROR.INVALID_CREDENTIALS, error);
+
       return NextResponse.json(
-        { message: `Invalid credentials ${error}` },
+        { message: `${AUTH_MESSAGES.ERROR.INVALID_CREDENTIALS} ${error}` },
         { status: 400 }
       );
     }
@@ -70,17 +72,17 @@ export class AuthController {
 
   static async logout() {
     try {
-      await userService.logout();
+      await AuthService.logout();
 
       return NextResponse.json(
-        { message: "Logged out successfully" },
+        { message: AUTH_MESSAGES.SUCCESS.LOGOUT_SUCCESSFUL },
         { status: 200 }
       );
     } catch (error) {
-      console.error("Error during logout:", error);
+      console.error(AUTH_MESSAGES.ERROR.ERROR_LOGGING_OUT, error);
 
       return NextResponse.json(
-        { message: "Error during logout" },
+        { message: AUTH_MESSAGES.ERROR.ERROR_LOGGING_OUT },
         { status: 500 }
       );
     }

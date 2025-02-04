@@ -1,24 +1,21 @@
 import { TaskStatus } from "@prisma/client";
-import prisma from "@/server/utils/db";
+import prisma from "@/server/db";
 
 export class TaskService {
-  
   static async getAllTasksByUserId(userId: number) {
     return prisma.task.findMany({
       where: { userId },
       orderBy: {
-        createdAt: "asc"
+        createdAt: "asc",
       },
     });
   }
 
-  
   static async createTask(title: string, userId: number) {
     return prisma.task.create({
       data: { title, userId },
     });
   }
-
 
   static async updateTaskStatus(
     id: number,
@@ -37,7 +34,6 @@ export class TaskService {
     });
   }
 
-  
   static async deleteTask(id: number, userId: number) {
     const task = await prisma.task.findUnique({ where: { id } });
 

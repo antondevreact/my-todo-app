@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { TaskService } from "../services/taskService";
-import { authOptions } from "../utils/auth";
+import { authOptions } from "@/server/auth";
+import { TaskService } from "@/server/services/taskService";
 
 export class TaskController {
   static async getTasks() {
@@ -14,7 +14,7 @@ export class TaskController {
     const userId = Number(session.user.id);
 
     const tasks = await TaskService.getAllTasksByUserId(userId);
-    
+
     return NextResponse.json(tasks);
   }
 

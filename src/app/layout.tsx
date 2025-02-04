@@ -1,29 +1,32 @@
 "use client";
 
-import "@/global.css";
 import React from "react";
-import { GlobalStateProvider } from "@/client/context/GlobalStateContext";
-import { SessionProvider } from "next-auth/react";
 import { ReactNode } from "react";
-import GlobalErrorModal from "@/app/components/error/Error";
-import SessionNav from "@/app/components/SessionNav";
+import { SessionProvider } from "next-auth/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ErrorProvider } from "./context/ErrorContext";
+import { Navigation } from "@/src/components/Navigation";
+import { ErrorModal } from "@/components/ErrorModal";
+import "./global.css";
+
+const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: ReactNode;
-}>) {
+}: Readonly<{ children: ReactNode }>) {
   return (
-    <SessionProvider>
-      <GlobalStateProvider>
-        <html lang="en" data-tailwind="true">
-          <body className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
-            <GlobalErrorModal />
-            <SessionNav />
-            <main className="flex-1">{children}</main>
-          </body>
-        </html>
-      </GlobalStateProvider>
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider>
+        <ErrorProvider>
+          <html lang="en" data-tailwind="true">
+            <body className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
+              <ErrorModal />
+              <Navigation />
+              <main className="flex-1">{children}</main>
+            </body>
+          </html>
+        </ErrorProvider>
+      </SessionProvider>
+    </QueryClientProvider>
   );
 }
